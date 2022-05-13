@@ -9,7 +9,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Getter@Setter
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "proveedores")
@@ -22,7 +24,10 @@ public class Proveedor implements Serializable {
     private String telefono;
 
     @JsonIgnoreProperties({"hibernateLazyInitiazer","handler"})
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "id_representante")
     private Representante representante;
+
+
+    private static final long serialVersionUID=1L;
 }

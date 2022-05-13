@@ -1,7 +1,6 @@
 package com.utp.factory.spring_fecoma_api_rest.controllers;
 
 import com.utp.factory.spring_fecoma_api_rest.entities.Empleado;
-import com.utp.factory.spring_fecoma_api_rest.entities.Proveedor;
 import com.utp.factory.spring_fecoma_api_rest.services.IEmpleadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,9 @@ public class EmpleadoController {
     @Autowired
     private IEmpleadoService iEmpleadoService;
 
+    @GetMapping("/lista")//listar Empleados
     public ResponseEntity<List<Empleado>> fineAll(){
+
         return ResponseEntity.ok(iEmpleadoService.fineAll());
     }
     @GetMapping("/pagina/{page}")//paginacion
@@ -49,8 +50,8 @@ public class EmpleadoController {
 
     }
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminarProveedor(@PathVariable Long id){
+    public ResponseEntity<String> eliminarEmpleado(@PathVariable Long id){
         iEmpleadoService.eliminar(id);
-        return  new ResponseEntity<>("Proveedor eliminado", HttpStatus.OK);
+        return  new ResponseEntity<>("Empleado eliminado", HttpStatus.OK);
     }
 }

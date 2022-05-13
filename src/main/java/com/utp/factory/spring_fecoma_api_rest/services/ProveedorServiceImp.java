@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class ProveedorServiceImp implements IProveedorService{
     private ProveedorRepository proveedorRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Proveedor> fineAll() {
 
         return (List<Proveedor>) proveedorRepository.findAll();
@@ -23,6 +25,7 @@ public class ProveedorServiceImp implements IProveedorService{
 
     @Override
     public Page<Proveedor> paginacion(Pageable pageable) {//paginacion
+
         return proveedorRepository.findAll(pageable);
     }
 

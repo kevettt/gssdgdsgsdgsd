@@ -6,11 +6,11 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface IKardexService {
+public interface IDetalleKardexService {
     List<DetalleKardex> fineAll();
     Page<DetalleKardex> paginacion(Pageable pageable);
     DetalleKardex find(Long id);
     void eliminar(Long id);
-    DetalleKardex save(DetalleKardex categoria);
-    DetalleKardex edit(DetalleKardex categoria);
+    DetalleKardex save(DetalleKardex detalleKardex);
+    DetalleKardex edit(DetalleKardex detalleKardex);
 }
