@@ -35,12 +35,12 @@ public class RepresentanteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Representante> getCategoria(@PathVariable Long id){
+    public ResponseEntity<Representante> getRepresentante(@PathVariable Long id){
         return ResponseEntity.ok(iRepresentanteService.find(id));
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crearCategoria(@Valid @RequestBody Representante representante, BindingResult result) {
+    public ResponseEntity<?> crearRepresentante(@Valid @RequestBody Representante representante, BindingResult result) {
         Representante representante1 = new Representante();
         var response = new HashMap<String, Object>();
         if(result.hasErrors()) {
@@ -65,7 +65,7 @@ public class RepresentanteController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Representante> editCategoria(@PathVariable Long id,@RequestBody Representante representante){
+    public ResponseEntity<Representante> editRepresentante(@PathVariable Long id,@RequestBody Representante representante){
         Representante representante1 = iRepresentanteService.find(id);
         representante1.setNombres(representante.getNombres());
         representante1.setApellidos(representante.getApellidos());
@@ -75,7 +75,7 @@ public class RepresentanteController {
 
     }
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminarCateoria(@PathVariable Long id) {
+    public ResponseEntity<String> eliminarRepresentante(@PathVariable Long id) {
         iRepresentanteService.eliminar(id);
         return new ResponseEntity<>("Categoria eliminado", HttpStatus.OK);
     }

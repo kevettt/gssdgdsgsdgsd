@@ -20,16 +20,16 @@ public class Representante implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "El nombre no puede ser vacio")
+    @NotEmpty(message = "Tiene que ingresar un nombre")
     @Column(nullable = false)
     private String nombres;
 
     @Column(nullable = false)
-    @NotEmpty(message = "El apellido no puede ser vacio")
+    @NotEmpty(message = "Tiene que ingresar un apellido")
     private String apellidos;
 
     @Column(nullable = false)
-    @Size(max = 9,min = 7,message = "Pocos caracteres 7 y 9")
+    @Size(max = 9,min = 7,message = "Ingrese entre 7 y 9 digitos")
     private String telefono;
 
     @Column(nullable = false,unique = true)

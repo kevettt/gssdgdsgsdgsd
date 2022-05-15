@@ -1,7 +1,7 @@
 package com.utp.factory.spring_fecoma_api_rest.controllers;
 
-import com.utp.factory.spring_fecoma_api_rest.entities.Categoria;
-import com.utp.factory.spring_fecoma_api_rest.services.ICategoriaService;
+import com.utp.factory.spring_fecoma_api_rest.entities.Motivo;
+import com.utp.factory.spring_fecoma_api_rest.services.IMotivoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,40 +15,40 @@ import java.util.List;
 @RequestMapping(value ="/api/v1/motivo/")
 public class MotivoController {
     @Autowired
-    private ICategoriaService iCategoriaService;
+    private IMotivoService iMotivoService;
 
     @GetMapping("/list")
-    public ResponseEntity<List<Categoria>> fineAll(){
+    public ResponseEntity<List<Motivo>> fineAll(){
 
-        return ResponseEntity.ok(iCategoriaService.fineAll());
+        return ResponseEntity.ok(iMotivoService.fineAll());
     }
 
     @GetMapping("/pagina/{page}")
-    public ResponseEntity<Page<Categoria>> fineAll(@PathVariable Integer page){
-        return ResponseEntity.ok(iCategoriaService.paginacion(PageRequest.of(page,10)));
+    public ResponseEntity<Page<Motivo>> fineAll(@PathVariable Integer page){
+        return ResponseEntity.ok(iMotivoService.paginacion(PageRequest.of(page,10)));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> getCategoria(@PathVariable Long id){
-        return ResponseEntity.ok(iCategoriaService.find(id));
+    public ResponseEntity<Motivo> getMotivo(@PathVariable Long id){
+        return ResponseEntity.ok(iMotivoService.find(id));
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<Categoria> crearCategoria(@RequestBody Categoria categoria) {
+    public ResponseEntity<Motivo> crearMotivo(@RequestBody Motivo motivo) {
 
-        return ResponseEntity.ok(iCategoriaService.save(categoria));
+        return ResponseEntity.ok(iMotivoService.save(motivo));
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Categoria> editCategoria(@PathVariable Long id,@RequestBody Categoria categoria){
-        Categoria categoria1 = iCategoriaService.find(id);
-        categoria1.setDescripcion(categoria.getDescripcion());
-        return ResponseEntity.ok(iCategoriaService.edit(categoria1));
+    public ResponseEntity<Motivo> editMotivo(@PathVariable Long id,@RequestBody Motivo motivo){
+        Motivo motivo1 = iMotivoService.find(id);
+        motivo1.setMotivo(motivo.getMotivo());
+        return ResponseEntity.ok(iMotivoService.edit(motivo1));
 
     }
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminarCateoria(@PathVariable Long id) {
-        iCategoriaService.eliminar(id);
-        return new ResponseEntity<>("Categoria eliminado", HttpStatus.OK);
+        iMotivoService.eliminar(id);
+        return new ResponseEntity<>("Motivo eliminado", HttpStatus.OK);
     }
 }

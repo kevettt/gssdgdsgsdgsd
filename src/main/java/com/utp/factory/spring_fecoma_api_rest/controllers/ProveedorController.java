@@ -44,8 +44,8 @@ public class ProveedorController {
     public ResponseEntity<Proveedor> editProveedor(@PathVariable Long id,@RequestBody Proveedor proveedor){
         Proveedor proveedor1 = iProveedorService.find(id);
         proveedor1.setNombre(proveedor.getNombre());
-        proveedor1.setCorreo(proveedor.getCorreo());
-        proveedor1.setTelefono(proveedor.getTelefono());
+        proveedor1.setRuc(proveedor.getRuc());
+        proveedor1.setDireccion(proveedor.getDireccion());
         return ResponseEntity.ok(iProveedorService.edit(proveedor1));
 
     }

@@ -21,8 +21,8 @@ public class Proveedor implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    private String correo;
-    private String telefono;
+    private String ruc;
+    private String direccion;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @OneToMany(fetch = FetchType.LAZY)
