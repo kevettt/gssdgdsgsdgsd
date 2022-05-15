@@ -21,11 +21,11 @@ public class Kardex implements Serializable {
     private String fecha;
     private double monto;
 
-    @JsonIgnoreProperties({"hibernateLazyInitiazer","handler"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     private Motivo motivo;
 
-    @JsonIgnoreProperties({"hibernateLazyInitiazer","handler"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     private Empleado empleado;
 

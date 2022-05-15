@@ -23,11 +23,11 @@ public class Producto implements Serializable {
     private double costo;
     private int cantidad;
 
-    @JsonIgnoreProperties({"hibernateLazyInitiazer","handler"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     private Proveedor proveedor;
 
-    @JsonIgnoreProperties({"hibernateLazyInitiazer","handler"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     private Categoria categoria;
 

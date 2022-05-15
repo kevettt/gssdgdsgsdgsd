@@ -21,7 +21,7 @@ public class Empleado implements Serializable {
     private String nombre;
     private String apellido;
 
-    @JsonIgnoreProperties({"hibernateLazyInitiazer","handler"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     private Puesto puesto;
 }

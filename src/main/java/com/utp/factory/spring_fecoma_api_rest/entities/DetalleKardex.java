@@ -21,11 +21,11 @@ public class DetalleKardex implements Serializable {
     private double monto;
     private int cantidad;
 
-    @JsonIgnoreProperties({"hibernateLazyInitiazer","handler"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     private Producto producto;
 
-    @JsonIgnoreProperties({"hibernateLazyInitiazer","handler"})
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     private Kardex kardex;
 

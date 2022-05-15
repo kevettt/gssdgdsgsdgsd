@@ -19,7 +19,7 @@ public class ProveedorController {
     private IProveedorService iProveedorService;
 
     @GetMapping("/lista")//listar proveedores
-    public ResponseEntity<List<Proveedor > > fineAll(){
+    public ResponseEntity<List<Proveedor>> fineAll(){
 
         return ResponseEntity.ok(iProveedorService.fineAll());
     }
