@@ -34,8 +34,16 @@ public class ProductoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Producto> getProducto(@PathVariable Long id){
-        return  ResponseEntity.ok(iProductoService.find(id));
+    public ResponseEntity<?> getProducto(@PathVariable Long id){
+        var response = new HashMap<String, Object>();
+        try {
+            response.put("mensaje","Producto : ".concat(id.toString().concat(" encontrado")));
+
+        }catch (Exception e){
+            response.put("mensaje","error al buscar el producto");
+            response.put("error",e.getMessage().concat(" = ").concat(e.getMessage()));
+        }
+        return new ResponseEntity<Map<String, Object>>(response,HttpStatus.OK);
     }
 
     @PostMapping("/crear")
@@ -52,31 +60,71 @@ public class ProductoController {
         }
         try {
             producto1 = iProductoService.save(producto);
+            response.put("producto",producto1);
+            response.put("mensaje","Se creo el producto con exito");
         }catch (DataAccessException e){
             response.put("mensaje","error al crear el producto");
             response.put("error",e.getMessage().concat(" = ").concat(e.getMostSpecificCause().getMessage()));
         }
-        response.put("producto",producto1);
-        response.put("mensaje","Se creo el producto con exito");
+
 
 
         return new ResponseEntity<Map<String, Object>>(response,HttpStatus.CREATED);
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Producto> editEmpleado(@PathVariable Long id,@RequestBody Producto producto){
-        Producto producto1 = iProductoService.find(id);
-        producto1.setNombre(producto.getNombre());
-        producto1.setDescripcion(producto.getDescripcion());
-        producto1.setCategoria(producto.getCategoria());
-        producto1.setCosto(producto.getCosto());
-        producto1.setCantidad(producto.getCantidad());
-        return ResponseEntity.ok(iProductoService.edit(producto1));
+    public ResponseEntity<?> editEmpleado(@Valid @RequestBody Producto producto, BindingResult result,@PathVariable Long id){
+        Producto productoactual = new Producto();
+        Producto productoactualizado= new Producto();
+        productoactual = iProductoService.find(id);
+        var response = new HashMap<String, Object>();
+
+        if(result.hasErrors()) {
+            var errors= result.getFieldErrors()
+                    .stream()
+                    .map(er->er.getField()+" "+er.getDefaultMessage()).collect(Collectors.toList());
+            response.put("error",errors);
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);
+
+        }
+        if (productoactual==null){
+            response.put("mensaje","el producto con el id: ".concat(id.toString().concat("no existe en la base de datos")));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+        }
+
+        try {
+            productoactual.setNombre(producto.getNombre());
+            productoactual.setDescripcion(producto.getDescripcion());
+            productoactual.setCategoria(producto.getCategoria());
+            productoactual.setCosto(producto.getCosto());
+            productoactual.setCantidad(producto.getCantidad());
+            productoactual.setProveedor(producto.getProveedor());
+            productoactualizado=iProductoService.edit(productoactual);
+            response.put("producto",productoactualizado);
+            response.put("mensaje","se actualizo el producto correctamente");
+
+        }catch (DataAccessException e){
+            response.put("mensaje","error al actualizar el producto");
+            response.put("error",e.getMessage().concat(" = ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
+        return new ResponseEntity<Map<String, Object>>(response,HttpStatus.CREATED);
 
     }
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminarProducto(@PathVariable Long id){
-        iProductoService.eliminar(id);
+        var response = new HashMap<String, Object>();
+        try {
+            response.put("mensaje","Producto elimnado");
+            iProductoService.eliminar(id);
+
+        }catch (Exception e){
+            response.put("mensaje","error al eliminar el producto");
+            response.put("error",e.getMessage().concat(" = ").concat(e.getMessage()));
+        }
+
         return  new ResponseEntity<>("Producto eliminado", HttpStatus.OK);
     }
 }

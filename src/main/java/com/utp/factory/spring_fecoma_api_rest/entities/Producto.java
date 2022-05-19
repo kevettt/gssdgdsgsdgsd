@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Getter
@@ -29,10 +31,13 @@ public class Producto implements Serializable {
     private String descripcion;
 
 
+
+    @Min(value = 1)
     private double costo;
 
 
 
+    @Min(value = 1, message = "Ingrese un numero superior a 1 digitos")
     private int cantidad;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})

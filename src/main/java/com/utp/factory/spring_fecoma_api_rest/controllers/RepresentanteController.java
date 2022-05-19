@@ -35,8 +35,16 @@ public class RepresentanteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Representante> getRepresentante(@PathVariable Long id){
-        return ResponseEntity.ok(iRepresentanteService.find(id));
+    public ResponseEntity<?> getRepresentante(@PathVariable Long id){
+        var response = new HashMap<String, Object>();
+        try {
+            response.put("mensaje","Representante : ".concat(id.toString().concat("encontrado")));
+
+        }catch (Exception e){
+            response.put("mensaje","error al buscar el representante");
+            response.put("error",e.getMessage().concat(" = ").concat(e.getMessage()));
+        }
+        return new ResponseEntity<Map<String, Object>>(response,HttpStatus.OK);
     }
 
     @PostMapping("/crear")
@@ -53,30 +61,66 @@ public class RepresentanteController {
         }
         try {
             representante1 = iRepresentanteService.save(representante);
+            response.put("representante",representante1);
+            response.put("mensaje","Se creo el representante con exito");
         }catch (DataAccessException e){
             response.put("mensaje","error al crear el representante");
             response.put("error",e.getMessage().concat(" = ").concat(e.getMostSpecificCause().getMessage()));
         }
-        response.put("representante",representante1);
-        response.put("mensaje","Se creo el representante con exito");
 
 
         return new ResponseEntity<Map<String, Object>>(response,HttpStatus.CREATED);
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Representante> editRepresentante(@PathVariable Long id,@RequestBody Representante representante){
-        Representante representante1 = iRepresentanteService.find(id);
-        representante1.setNombres(representante.getNombres());
-        representante1.setApellidos(representante.getApellidos());
-        representante1.setCorreo(representante.getCorreo());
-        representante1.setTelefono(representante.getTelefono());
-        return ResponseEntity.ok(iRepresentanteService.edit(representante1));
+    public ResponseEntity<?> editRepresentante(@Valid @RequestBody Representante representante, BindingResult result,@PathVariable Long id){
+        Representante representanteactual = new Representante();
+        Representante representanteactualizado = new Representante();
+        representanteactual = iRepresentanteService.find(id);
+        var response = new HashMap<String, Object>();
+
+        if(result.hasErrors()) {
+            var errors= result.getFieldErrors()
+                    .stream()
+                    .map(er->er.getField()+" "+er.getDefaultMessage()).collect(Collectors.toList());
+            response.put("error",errors);
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);
+
+        }
+        if(representanteactual==null){
+            response.put("mensaje","el representan con el id: ".concat(id.toString().concat("no existe en la base de datos")));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+        }
+
+        try {
+            representanteactual.setNombres(representante.getNombres());
+            representanteactual.setApellidos(representante.getApellidos());
+            representanteactual.setCorreo(representante.getCorreo());
+            representanteactual.setTelefono(representante.getTelefono());
+            representanteactualizado = iRepresentanteService.edit(representanteactual);
+            response.put("representante",representanteactualizado);
+            response.put("mensaje","se actualizo el representante correctamente");
+
+        }catch (DataAccessException e ){
+            response.put("mensaje","error al actualizar el representante");
+            response.put("error",e.getMessage().concat(" = ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<Map<String, Object>>(response,HttpStatus.CREATED);
 
     }
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminarRepresentante(@PathVariable Long id) {
-        iRepresentanteService.eliminar(id);
-        return new ResponseEntity<>("Categoria eliminado", HttpStatus.OK);
+    public ResponseEntity<?> eliminarRepresentante(@PathVariable Long id) {
+        var response = new HashMap<String, Object>();
+        try {
+            response.put("mensaje","Representante elimnado");
+            iRepresentanteService.eliminar(id);
+
+        }catch (Exception e){
+            response.put("mensaje","error al eliminar al representante");
+            response.put("error",e.getMessage().concat(" = ").concat(e.getMessage()));
+        }
+
+        return new ResponseEntity<Map<String, Object>>(response,HttpStatus.OK);
     }
 }

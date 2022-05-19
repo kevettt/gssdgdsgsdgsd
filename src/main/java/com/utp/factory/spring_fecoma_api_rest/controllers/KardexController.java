@@ -38,6 +38,7 @@ public class KardexController {
     @PostMapping("/crear")
     public ResponseEntity<Kardex> crearKardex(@RequestBody Kardex kardex) {
 
+
         return ResponseEntity.ok(iKardexService.save(kardex));
     }
 

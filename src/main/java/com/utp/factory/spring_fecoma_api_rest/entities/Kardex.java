@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -15,10 +18,17 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity(name = "kardex")
 public class Kardex implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String fecha;
+
+    @Temporal(TemporalType.DATE)
+    private Date fecha;
+
+    @Column(nullable = false)
+    @Size(max = 6000,min = 0,message = "Ingrese un numero superior a 0 digitos")
+    @Min(value = 0)
     private double monto;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
@@ -28,6 +38,8 @@ public class Kardex implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     private Empleado empleado;
+
+
 
 
 }

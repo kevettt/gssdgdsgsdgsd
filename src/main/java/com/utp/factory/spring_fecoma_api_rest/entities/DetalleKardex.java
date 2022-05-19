@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Getter
@@ -18,7 +20,15 @@ public class DetalleKardex implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    @Size(max = 6000,min = 0,message = "Ingrese un numero superior a 0 digitos")
+    @Min(value = 0)
     private double monto;
+
+    @Column(nullable = false)
+    @Size(max = 6000,min = 0,message = "Ingrese un numero superior a 0 digitos")
+    @Min(value = 0)
     private int cantidad;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
@@ -28,5 +38,10 @@ public class DetalleKardex implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     private Kardex kardex;
+
+    public double getMontoItem(){
+        monto=cantidad*producto.getCosto();
+        return monto;
+    }
 
 }

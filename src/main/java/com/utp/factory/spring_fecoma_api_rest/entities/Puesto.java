@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Getter
@@ -23,6 +25,9 @@ public class Puesto implements Serializable {
     @NotEmpty(message = "Tiene que ingresar el nombre del puesto")
     private String puesto;
 
+    @Column(nullable = false)
+    @Size(max = 6000,min = 0,message = "Ingrese un numero superior a 0 digitos")
+    @Min(value = 0)
     private double sueldo;
 
     @Column(nullable = false)
