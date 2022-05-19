@@ -5,10 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 @Getter
@@ -20,7 +18,14 @@ public class Puesto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    @NotEmpty(message = "Tiene que ingresar el nombre del puesto")
     private String puesto;
+
     private double sueldo;
+
+    @Column(nullable = false)
+    @NotEmpty(message = "Tiene que ingresar descripción del puesto")
     private String descripcion;
 }

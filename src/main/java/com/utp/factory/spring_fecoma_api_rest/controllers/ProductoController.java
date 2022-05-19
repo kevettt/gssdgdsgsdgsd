@@ -3,13 +3,19 @@ package com.utp.factory.spring_fecoma_api_rest.controllers;
 import com.utp.factory.spring_fecoma_api_rest.entities.Producto;
 import com.utp.factory.spring_fecoma_api_rest.services.IProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/v1/producto/")
@@ -33,9 +39,28 @@ public class ProductoController {
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<Producto> crearProducto(@RequestBody Producto producto) {
+    public ResponseEntity<?> crearProducto(@Valid @RequestBody Producto producto, BindingResult result) {
+        Producto producto1 = new Producto();
+        var response = new HashMap<String, Object>();
+        if(result.hasErrors()) {
+            var errors= result.getFieldErrors()
+                    .stream()
+                    .map(er->er.getField()+" "+er.getDefaultMessage()).collect(Collectors.toList());
+            response.put("error",errors);
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);
 
-        return ResponseEntity.ok(iProductoService.save(producto));
+        }
+        try {
+            producto1 = iProductoService.save(producto);
+        }catch (DataAccessException e){
+            response.put("mensaje","error al crear el producto");
+            response.put("error",e.getMessage().concat(" = ").concat(e.getMostSpecificCause().getMessage()));
+        }
+        response.put("producto",producto1);
+        response.put("mensaje","Se creo el producto con exito");
+
+
+        return new ResponseEntity<Map<String, Object>>(response,HttpStatus.CREATED);
     }
 
     @PutMapping("/edit/{id}")

@@ -5,13 +5,19 @@ import com.utp.factory.spring_fecoma_api_rest.entities.Puesto;
 import com.utp.factory.spring_fecoma_api_rest.services.ICategoriaService;
 import com.utp.factory.spring_fecoma_api_rest.services.IPuestoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -38,9 +44,28 @@ public class PuestoController {
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<Puesto> crearPuesto(@RequestBody Puesto puesto) {
+    public ResponseEntity<?> crearPuesto(@Valid @RequestBody Puesto puesto, BindingResult result) {
+        Puesto puesto1 = new Puesto();
+        var response = new HashMap<String, Object>();
+        if(result.hasErrors()) {
+            var errors= result.getFieldErrors()
+                    .stream()
+                    .map(er->er.getField()+" "+er.getDefaultMessage()).collect(Collectors.toList());
+            response.put("error",errors);
+            return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);
 
-        return ResponseEntity.ok(iPuestoService.save(puesto));
+        }
+        try {
+            puesto1 = iPuestoService.save(puesto);
+        }catch (DataAccessException e){
+            response.put("mensaje","error al crear el puesto");
+            response.put("error",e.getMessage().concat(" = ").concat(e.getMostSpecificCause().getMessage()));
+        }
+        response.put("puesto",puesto1);
+        response.put("mensaje","Se creo el puesto con exito");
+
+
+        return new ResponseEntity<Map<String, Object>>(response,HttpStatus.CREATED);
     }
 
     @PutMapping("/edit/{id}")
