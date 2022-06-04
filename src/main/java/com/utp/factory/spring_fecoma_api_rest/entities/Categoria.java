@@ -20,10 +20,10 @@ public class Categoria implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    @NotEmpty(message = "Tiene que ingresar nombre de categoria")
+    @NotEmpty(message = ": El campo nombre es requerido")
     private String nombre;
 
     @Column(nullable = false)
-    @NotEmpty(message = "Tiene que ingresar descripcion de categoria")
+    @NotEmpty(message = ": El campo descripcion es requerido")
     private String descripcion;
 }

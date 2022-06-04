@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value ="/api/v1/categoria/")
+@CrossOrigin
 public class CategoriaController {
 
 
@@ -28,7 +29,6 @@ public class CategoriaController {
 
     @GetMapping("/list")
     public ResponseEntity<List<Categoria>>fineAll(){
-
         return ResponseEntity.ok(iCategoriaService.fineAll());
     }
 

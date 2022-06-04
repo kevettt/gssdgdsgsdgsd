@@ -1,7 +1,7 @@
 package com.utp.factory.spring_fecoma_api_rest.controllers;
 
-import com.utp.factory.spring_fecoma_api_rest.entities.Motivo;
-import com.utp.factory.spring_fecoma_api_rest.services.IMotivoService;
+import com.utp.factory.spring_fecoma_api_rest.entities.TipoOperacion;
+import com.utp.factory.spring_fecoma_api_rest.services.ITipoOperacionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -19,29 +19,29 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value ="/api/v1/motivo/")
-public class MotivoController {
+public class TipoOperacionController {
     @Autowired
-    private IMotivoService iMotivoService;
+    private ITipoOperacionService iTipoOperacionService;
 
     @GetMapping("/list")
-    public ResponseEntity<List<Motivo>> fineAll(){
+    public ResponseEntity<List<TipoOperacion>> fineAll(){
 
-        return ResponseEntity.ok(iMotivoService.fineAll());
+        return ResponseEntity.ok(iTipoOperacionService.fineAll());
     }
 
     @GetMapping("/pagina/{page}")
-    public ResponseEntity<Page<Motivo>> fineAll(@PathVariable Integer page){
-        return ResponseEntity.ok(iMotivoService.paginacion(PageRequest.of(page,10)));
+    public ResponseEntity<Page<TipoOperacion>> fineAll(@PathVariable Integer page){
+        return ResponseEntity.ok(iTipoOperacionService.paginacion(PageRequest.of(page,10)));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Motivo> getMotivo(@PathVariable Long id){
-        return ResponseEntity.ok(iMotivoService.find(id));
+    public ResponseEntity<TipoOperacion> getMotivo(@PathVariable Long id){
+        return ResponseEntity.ok(iTipoOperacionService.find(id));
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crearMotivo(@Valid @RequestBody Motivo motivo, BindingResult result) {
-        Motivo motivo1 = new Motivo();
+    public ResponseEntity<?> crearMotivo(@Valid @RequestBody TipoOperacion tipoOperacion, BindingResult result) {
+        TipoOperacion tipoOperacion1 = new TipoOperacion();
         var response = new HashMap<String, Object>();
         if(result.hasErrors()) {
             var errors= result.getFieldErrors()
@@ -52,13 +52,13 @@ public class MotivoController {
 
         }
         try {
-            motivo1 = iMotivoService.save(motivo);
+            tipoOperacion1 = iTipoOperacionService.save(tipoOperacion);
         }catch (DataAccessException e){
-            response.put("mensaje","error al crear el motivo");
+            response.put("mensaje","error al crear el tipoOperacion");
             response.put("error",e.getMessage().concat(" = ").concat(e.getMostSpecificCause().getMessage()));
         }
-        response.put("motivo",motivo1);
-        response.put("mensaje","Se creo el motivo con exito");
+        response.put("motivo", tipoOperacion1);
+        response.put("mensaje","Se creo el tipoOperacion con exito");
 
 
         return new ResponseEntity<Map<String, Object>>(response,HttpStatus.CREATED);
@@ -66,15 +66,15 @@ public class MotivoController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<Motivo> editMotivo(@PathVariable Long id,@RequestBody Motivo motivo){
-        Motivo motivo1 = iMotivoService.find(id);
-        motivo1.setMotivo(motivo.getMotivo());
-        return ResponseEntity.ok(iMotivoService.edit(motivo1));
+    public ResponseEntity<TipoOperacion> editMotivo(@PathVariable Long id, @RequestBody TipoOperacion tipoOperacion){
+        TipoOperacion tipoOperacion1 = iTipoOperacionService.find(id);
+        tipoOperacion1.setMotivo(tipoOperacion.getMotivo());
+        return ResponseEntity.ok(iTipoOperacionService.edit(tipoOperacion1));
 
     }
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminarCateoria(@PathVariable Long id) {
-        iMotivoService.eliminar(id);
-        return new ResponseEntity<>("Motivo eliminado", HttpStatus.OK);
+        iTipoOperacionService.eliminar(id);
+        return new ResponseEntity<>("TipoOperacion eliminado", HttpStatus.OK);
     }
 }

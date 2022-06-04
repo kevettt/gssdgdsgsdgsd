@@ -1,53 +1,65 @@
-package com.utp.factory.spring_fecoma_api_rest.entities;
+package com.utp.factory.spring_fecoma_api_rest.security.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.utp.factory.spring_fecoma_api_rest.entities.Puesto;
+import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity(name = "empleados")
-public class Empleado implements Serializable {
+@Data
+@Entity(name = "usuarios")
+public class Usuario implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Tiene que ingresar un nombre")
+    @NotEmpty
     @Column(nullable = false)
     private String nombre;
 
-    @NotEmpty(message = "Tiene que ingresar un apellido")
+    @NotEmpty
     @Column(nullable = false)
     private String apellido;
 
-    @NotEmpty(message = "Tiene que ingresar una dirreción")
+    @NotEmpty
     @Column(nullable = false)
     private String direccion;
 
-    @NotEmpty(message = "Tiene que ingresar un documento de identidad")
+    @NotEmpty
     @Column(nullable = false)
     @Size(max = 9,min = 8,message = "Ingrese entre 7 y 9 digitos")
     private String dni;
 
-    @NotEmpty(message = "Tiene que ingresar un numero telefonico")
+    @NotEmpty
     @Column(nullable = false)
     @Size(max = 9,min = 7,message = "Ingrese entre 7 y 9 digitos")
     private String telefono;
 
     @Column(nullable = false,unique = true)
     @NotEmpty
-    @Email(message = "Ingrese email correcto")
+    @Email
     private String correo;
+
+    @Column(unique = true, length = 20)
+    private String username;
+
+    @Column(length = 60)
+    private String password;
+
+    private Boolean enabled;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "usuarios_roles",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id","role_id"})})
+    private List<Role> roles;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)

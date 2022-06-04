@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/v1/proveedor/")
+@CrossOrigin
 public class ProveedorController {
 
     @Autowired
@@ -32,7 +33,7 @@ public class ProveedorController {
 
     @GetMapping("/pagina/{page}")//paginacion
     public ResponseEntity<Page<Proveedor >> fineAll(@PathVariable Integer page){
-        return ResponseEntity.ok(iProveedorService.paginacion(PageRequest.of(page, 10)));
+        return ResponseEntity.ok(iProveedorService.paginacion(PageRequest.of(page, 4)));
     }
 
     @GetMapping("/{id}")
@@ -42,8 +43,9 @@ public class ProveedorController {
 
     @PostMapping("/crear")
     public ResponseEntity<?> crearProveedor(@Valid @RequestBody Proveedor proveedor, BindingResult result) {
-        Proveedor proveedor1 = new Proveedor();
+
         var response = new HashMap<String, Object>();
+
         if(result.hasErrors()) {
             var errors= result.getFieldErrors()
                     .stream()
@@ -52,14 +54,14 @@ public class ProveedorController {
             return new ResponseEntity<Map<String,Object>>(response,HttpStatus.BAD_REQUEST);
 
         }
+
         try {
-            proveedor1 = iProveedorService.save(proveedor);
+            response.put("proveedor",iProveedorService.save(proveedor));
+            response.put("mensaje","Se creo el proveedor con exito");
         }catch (DataAccessException e){
             response.put("mensaje","error al crear el proveedor");
             response.put("error",e.getMessage().concat(" = ").concat(e.getMostSpecificCause().getMessage()));
         }
-        response.put("proveedor",proveedor1);
-        response.put("mensaje","Se creo el proveedor con exito");
 
 
         return new ResponseEntity<Map<String, Object>>(response,HttpStatus.CREATED);

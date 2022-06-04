@@ -22,30 +22,32 @@ public class Producto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Tiene que ingresar el nombre del producto")
+    @NotEmpty(message = ": El campo nombre no puede ser vacio")
     @Column(nullable = false)
     private String nombre;
 
-    @NotEmpty(message = "Tiene que ingresar descripción del Producto")
+    @NotEmpty(message = ": El campo descripcion no puede ser vacio")
     @Column(nullable = false)
     private String descripcion;
 
 
 
-    @Min(value = 1)
+    @Min(value = 1,message = ": El monto no puede ser 0 o negativo")
     private double costo;
 
 
 
-    @Min(value = 1, message = "Ingrese un numero superior a 1 digitos")
+    @Min(value = 1, message = ": El cantidad no puede ser menor a 1")
     private int cantidad;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
 

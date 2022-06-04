@@ -1,5 +1,6 @@
 package com.utp.factory.spring_fecoma_api_rest.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,21 +21,26 @@ public class Representante implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Tiene que ingresar un nombre")
+    @NotEmpty(message = ": El campo nombre no puede ser vacio")
     @Column(nullable = false)
     private String nombres;
 
     @Column(nullable = false)
-    @NotEmpty(message = "Tiene que ingresar un apellido")
+    @NotEmpty(message = ": El campo apellido no puede ser vacio")
     private String apellidos;
 
     @Column(nullable = false)
-    @Size(max = 9,min = 7,message = "Ingrese entre 7 y 9 digitos")
+    @NotEmpty(message = ": El campo telefono no puede ser vacio")
+    @Size(max = 9,min = 7,message = ": Ingrese un telefono valido de entre 7 y 9 digitos")
     private String telefono;
 
     @Column(nullable = false,unique = true)
-    @NotEmpty
-    @Email(message = "Ingrese email correcto")
+    @NotEmpty(message = ": El campo correo no puede ser vacio")
+    @Email(message = ": Ingrese un email correcto")
     private String correo;
+
+    @JsonIgnoreProperties({"representante","hibernateLazyInitializer","handler"})
+    @OneToOne(fetch = FetchType.LAZY)
+    private Proveedor proveedor;
 
 }

@@ -45,8 +45,8 @@ public class KardexController {
     @PutMapping("/edit/{id}")
     public ResponseEntity<Kardex> editKardex(@PathVariable Long id,@RequestBody Kardex kardex){
         Kardex kardex1 = iKardexService.find(id);
-        kardex1.setEmpleado(kardex.getEmpleado());
-        kardex1.setMotivo(kardex.getMotivo());
+        kardex1.setUsuario(kardex.getUsuario());
+        kardex1.setTipoOperacion(kardex.getTipoOperacion());
         kardex1.setFecha(kardex.getFecha());
         kardex1.setMonto(kardex.getMonto());
         return ResponseEntity.ok(iKardexService.edit(kardex1));

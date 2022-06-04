@@ -10,8 +10,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.List;
-
 
 @Getter
 @Setter
@@ -23,23 +21,22 @@ public class Proveedor implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Tiene que ingresar un nombre")
-    @Column(nullable = false)
+    @NotEmpty(message = ": El campo nombre no puede ser vacio")
+    @Column(nullable = false,unique = true)
     private String nombre;
 
-    @Column(nullable = false)
-    @NotEmpty(message = "Tiene que ingresar el RUC")
-    @Size(max = 11,min = 10,message = "Ingrese los 11 digitos del RUC")
+    @Column(nullable = false,unique = true)
+    @NotEmpty(message = ": El campo ruc no puede ser vacio")
+    @Size(max = 11,min = 10,message = ": debe ingresar un ruc valido de 11 digitos")
     private String ruc;
 
-    @Column(nullable = false)
-    @NotEmpty(message = "Tiene que ingresar una dirección")
+    @Column(nullable = false,unique = true)
+    @NotEmpty(message = ": El campo direccion no puede ser vacio")
     private String direccion;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Representante> representantes;
-
+    @JsonIgnoreProperties({"proveedor","hibernateLazyInitializer","handler"})
+    @OneToOne(fetch = FetchType.LAZY,mappedBy = "proveedor", cascade = CascadeType.ALL)
+    private Representante representante;
 
     private static final long serialVersionUID=1L;
 }

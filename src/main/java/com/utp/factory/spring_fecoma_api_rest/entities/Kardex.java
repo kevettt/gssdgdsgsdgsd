@@ -1,6 +1,7 @@
 package com.utp.factory.spring_fecoma_api_rest.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.utp.factory.spring_fecoma_api_rest.security.entities.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,13 +34,10 @@ public class Kardex implements Serializable {
 
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)
-    private Motivo motivo;
+    private TipoOperacion tipoOperacion;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)
-    private Empleado empleado;
-
-
-
+    private Usuario usuario;
 
 }

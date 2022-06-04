@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,21 +20,25 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/v1/representante/")
+@CrossOrigin
 public class RepresentanteController {
     @Autowired
     private IRepresentanteService iRepresentanteService;
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/list")
     public ResponseEntity<List<Representante>> fineAll(){
 
         return ResponseEntity.ok(iRepresentanteService.fineAll());
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/pagina/{page}")
     public ResponseEntity<Page<Representante>> fineAll(@PathVariable Integer page){
-        return ResponseEntity.ok(iRepresentanteService.paginacion(PageRequest.of(page,10)));
+        return ResponseEntity.ok(iRepresentanteService.paginacion(PageRequest.of(page,4)));
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/{id}")
     public ResponseEntity<?> getRepresentante(@PathVariable Long id){
         var response = new HashMap<String, Object>();
@@ -47,6 +52,7 @@ public class RepresentanteController {
         return new ResponseEntity<Map<String, Object>>(response,HttpStatus.OK);
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/crear")
     public ResponseEntity<?> crearRepresentante(@Valid @RequestBody Representante representante, BindingResult result) {
         Representante representante1 = new Representante();
@@ -72,6 +78,7 @@ public class RepresentanteController {
         return new ResponseEntity<Map<String, Object>>(response,HttpStatus.CREATED);
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping("/edit/{id}")
     public ResponseEntity<?> editRepresentante(@Valid @RequestBody Representante representante, BindingResult result,@PathVariable Long id){
         Representante representanteactual = new Representante();
@@ -109,6 +116,8 @@ public class RepresentanteController {
         return new ResponseEntity<Map<String, Object>>(response,HttpStatus.CREATED);
 
     }
+
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<?> eliminarRepresentante(@PathVariable Long id) {
         var response = new HashMap<String, Object>();

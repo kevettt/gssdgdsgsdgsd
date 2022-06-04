@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/v1/producto/")
+@CrossOrigin
 public class ProductoController {
     @Autowired
     private IProductoService iProductoService;
@@ -30,14 +31,16 @@ public class ProductoController {
     }
     @GetMapping("/pagina/{page}")//paginacion
     public ResponseEntity<Page<Producto>> fineAll(@PathVariable Integer page){
-        return ResponseEntity.ok(iProductoService.paginacion(PageRequest.of(page, 10)));
+        return ResponseEntity.ok(iProductoService.paginacion(PageRequest.of(page, 4)));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProducto(@PathVariable Long id){
         var response = new HashMap<String, Object>();
+
         try {
-            response.put("mensaje","Producto : ".concat(id.toString().concat(" encontrado")));
+            var producto = iProductoService.find(id);
+            response.put("producto",producto);
 
         }catch (Exception e){
             response.put("mensaje","error al buscar el producto");
