@@ -44,10 +44,10 @@ public class ProveedorController {
     @PostMapping("/crear")
     public ResponseEntity<?> crearProveedor(@Valid @RequestBody Proveedor proveedor, BindingResult result) {
 
-        var response = new HashMap<String, Object>();
+        Map<String,Object> response = new HashMap<String, Object>();
 
         if(result.hasErrors()) {
-            var errors= result.getFieldErrors()
+            List<String> errors= result.getFieldErrors()
                     .stream()
                     .map(er->er.getField()+" "+er.getDefaultMessage()).collect(Collectors.toList());
             response.put("error",errors);

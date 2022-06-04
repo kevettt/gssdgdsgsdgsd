@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -51,9 +52,9 @@ public class UsuarioController {
     @PostMapping("/crear")
     public ResponseEntity<?> crearEmpleado(@Valid @RequestBody Usuario usuario, BindingResult result) {
         Usuario usuario1 = new Usuario();
-        var response = new HashMap<String, Object>();
+        Map<String,Object> response = new HashMap<String, Object>();
         if (result.hasErrors()){
-            var errors = result.getFieldErrors()
+            List<String> errors = result.getFieldErrors()
                     .stream()
                     .map(er->er.getField()+" "+er.getDefaultMessage()).collect(Collectors.toList());
             response.put("error",errors);

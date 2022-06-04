@@ -46,9 +46,9 @@ public class PuestoController {
     @PostMapping("/crear")
     public ResponseEntity<?> crearPuesto(@Valid @RequestBody Puesto puesto, BindingResult result) {
         Puesto puesto1 = new Puesto();
-        var response = new HashMap<String, Object>();
+        Map<String,Object> response = new HashMap<String, Object>();
         if(result.hasErrors()) {
-            var errors= result.getFieldErrors()
+            List<String> errors= result.getFieldErrors()
                     .stream()
                     .map(er->er.getField()+" "+er.getDefaultMessage()).collect(Collectors.toList());
             response.put("error",errors);

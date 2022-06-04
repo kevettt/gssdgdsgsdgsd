@@ -36,10 +36,10 @@ public class ProductoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getProducto(@PathVariable Long id){
-        var response = new HashMap<String, Object>();
+        Map<String,Object> response = new HashMap<String, Object>();
 
         try {
-            var producto = iProductoService.find(id);
+            Producto producto = iProductoService.find(id);
             response.put("producto",producto);
 
         }catch (Exception e){
@@ -52,9 +52,9 @@ public class ProductoController {
     @PostMapping("/crear")
     public ResponseEntity<?> crearProducto(@Valid @RequestBody Producto producto, BindingResult result) {
         Producto producto1 = new Producto();
-        var response = new HashMap<String, Object>();
+        Map<String,Object> response = new HashMap<String, Object>();
         if(result.hasErrors()) {
-            var errors= result.getFieldErrors()
+            List<String> errors= result.getFieldErrors()
                     .stream()
                     .map(er->er.getField()+" "+er.getDefaultMessage()).collect(Collectors.toList());
             response.put("error",errors);
@@ -80,10 +80,10 @@ public class ProductoController {
         Producto productoactual = new Producto();
         Producto productoactualizado= new Producto();
         productoactual = iProductoService.find(id);
-        var response = new HashMap<String, Object>();
+        Map<String,Object> response = new HashMap<String, Object>();
 
         if(result.hasErrors()) {
-            var errors= result.getFieldErrors()
+            List<String> errors= result.getFieldErrors()
                     .stream()
                     .map(er->er.getField()+" "+er.getDefaultMessage()).collect(Collectors.toList());
             response.put("error",errors);
@@ -118,7 +118,7 @@ public class ProductoController {
     }
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminarProducto(@PathVariable Long id){
-        var response = new HashMap<String, Object>();
+        Map<String,Object> response = new HashMap<String, Object>();
         try {
             response.put("mensaje","Producto elimnado");
             iProductoService.eliminar(id);

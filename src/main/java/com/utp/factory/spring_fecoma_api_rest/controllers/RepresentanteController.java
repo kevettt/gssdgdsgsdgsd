@@ -41,7 +41,7 @@ public class RepresentanteController {
     @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/{id}")
     public ResponseEntity<?> getRepresentante(@PathVariable Long id){
-        var response = new HashMap<String, Object>();
+        Map<String,Object> response = new HashMap<String, Object>();
         try {
             response.put("mensaje","Representante : ".concat(id.toString().concat("encontrado")));
 
@@ -56,9 +56,9 @@ public class RepresentanteController {
     @PostMapping("/crear")
     public ResponseEntity<?> crearRepresentante(@Valid @RequestBody Representante representante, BindingResult result) {
         Representante representante1 = new Representante();
-        var response = new HashMap<String, Object>();
+        Map<String,Object> response = new HashMap<String, Object>();
         if(result.hasErrors()) {
-            var errors= result.getFieldErrors()
+            List<String> errors= result.getFieldErrors()
                     .stream()
                     .map(er->er.getField()+" "+er.getDefaultMessage()).collect(Collectors.toList());
             response.put("error",errors);
@@ -84,10 +84,10 @@ public class RepresentanteController {
         Representante representanteactual = new Representante();
         Representante representanteactualizado = new Representante();
         representanteactual = iRepresentanteService.find(id);
-        var response = new HashMap<String, Object>();
+        Map<String,Object> response = new HashMap<String, Object>();
 
         if(result.hasErrors()) {
-            var errors= result.getFieldErrors()
+            List<String> errors= result.getFieldErrors()
                     .stream()
                     .map(er->er.getField()+" "+er.getDefaultMessage()).collect(Collectors.toList());
             response.put("error",errors);
@@ -120,7 +120,7 @@ public class RepresentanteController {
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<?> eliminarRepresentante(@PathVariable Long id) {
-        var response = new HashMap<String, Object>();
+        Map<String,Object> response = new HashMap<String, Object>();
         try {
             response.put("mensaje","Representante elimnado");
             iRepresentanteService.eliminar(id);

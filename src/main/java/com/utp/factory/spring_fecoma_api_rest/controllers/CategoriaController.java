@@ -45,9 +45,9 @@ public class CategoriaController {
     @PostMapping("/crear")
     public ResponseEntity<?> crearCategoria(@Valid @RequestBody Categoria categoria, BindingResult result) {
         Categoria categoria1 = new Categoria();
-        var response = new HashMap<String, Object>();
+        Map<String,Object> response = new HashMap<String, Object>();
         if(result.hasErrors()) {
-            var errors= result.getFieldErrors()
+            List<String> errors= result.getFieldErrors()
                     .stream()
                     .map(er->er.getField()+" "+er.getDefaultMessage()).collect(Collectors.toList());
             response.put("error",errors);
