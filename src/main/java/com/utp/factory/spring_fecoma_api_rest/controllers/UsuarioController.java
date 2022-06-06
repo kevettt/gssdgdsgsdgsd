@@ -1,6 +1,9 @@
 package com.utp.factory.spring_fecoma_api_rest.controllers;
 
+import com.utp.factory.spring_fecoma_api_rest.security.entities.Role;
 import com.utp.factory.spring_fecoma_api_rest.security.entities.Usuario;
+import com.utp.factory.spring_fecoma_api_rest.security.enums.RolNombre;
+import com.utp.factory.spring_fecoma_api_rest.security.services.IRolService;
 import com.utp.factory.spring_fecoma_api_rest.services.IUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -8,14 +11,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,6 +27,12 @@ public class UsuarioController {
 
     @Autowired
     private IUsuarioService iUsuarioService;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private IRolService rolService;
 
     @GetMapping("/lista")//listar Empleados
     public ResponseEntity<List<Usuario>> fineAll(){
@@ -41,18 +49,10 @@ public class UsuarioController {
         return  ResponseEntity.ok(iUsuarioService.find(id));
     }
 
-    /*crear sin validacion
     @PostMapping("/crear")
-    public ResponseEntity<Usuario> crearEmpleado(@RequestBody Usuario empleado) {
+    public ResponseEntity<?> crearEmpleado(@Valid @RequestBody Usuario nuevousuario, BindingResult result) {
+        Map<String,Object> response = new HashMap<>();
 
-        return ResponseEntity.ok(iUsuarioService.save(empleado));
-    }*/
-
-    //Crear con validacion
-    @PostMapping("/crear")
-    public ResponseEntity<?> crearEmpleado(@Valid @RequestBody Usuario usuario, BindingResult result) {
-        Usuario usuario1 = new Usuario();
-        Map<String,Object> response = new HashMap<String, Object>();
         if (result.hasErrors()){
             List<String> errors = result.getFieldErrors()
                     .stream()
@@ -60,16 +60,34 @@ public class UsuarioController {
             response.put("error",errors);
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
         }
+
+        if(iUsuarioService.existsByUsername(nuevousuario.getUsername())){
+            response.put("mensaje", "El nombre de usuario ya esta en uso");
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        if(iUsuarioService.existsByCorreo(nuevousuario.getCorreo())){
+            response.put("mensaje", "El email ya esta en uso");
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+        }
         try {
-            usuario1 = iUsuarioService.save(usuario);
+            Usuario usuario = new Usuario(nuevousuario.getNombre(), nuevousuario.getApellido(),nuevousuario.getDireccion(),nuevousuario.getDni(),nuevousuario.getTelefono(),nuevousuario.getCorreo(), nuevousuario.getUsername(),passwordEncoder.encode(nuevousuario.getPassword()),true);
+            Set<Role> roles = new HashSet<>();
+            roles.add(rolService.getByRol(RolNombre.ROLE_VENDEDOR).get());
+            if(nuevousuario.getRoles().contains("almacenero"))
+                roles.add(rolService.getByRol(RolNombre.ROLE_ALMACENERO).get());
+            usuario.setRoles(roles);
+            if(nuevousuario.getRoles().contains("admin"))
+                roles.add(rolService.getByRol(RolNombre.ROLE_ADMIN).get());
+            usuario.setRoles(roles);
+            iUsuarioService.save(usuario);
+            response.put("empleado", usuario);
+            response.put("mensaje", "Se creao el usuario con exito");
         }catch (DataAccessException e){
             response.put("mensaje", "error al crear el usuario");
             response.put("error", e.getMessage().concat(" ").concat(e.getMostSpecificCause().getMessage()));
 
         }
-        response.put("empleado", usuario1);
-        response.put("mensaje", "Se creao el usuario con exito");
-
 
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }

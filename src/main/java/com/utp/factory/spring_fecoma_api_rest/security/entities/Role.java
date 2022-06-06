@@ -1,10 +1,12 @@
 package com.utp.factory.spring_fecoma_api_rest.security.entities;
 
+import com.utp.factory.spring_fecoma_api_rest.security.enums.RolNombre;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
+
 
 @Data
 @Entity(name = "roles")
@@ -14,9 +16,8 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, length = 20)
-    private String rol;
 
-    @ManyToMany(mappedBy = "roles")
-    private List<Usuario> usuarios;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private RolNombre rol;
 }

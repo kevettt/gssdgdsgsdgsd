@@ -2,16 +2,25 @@ package com.utp.factory.spring_fecoma_api_rest.security.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.utp.factory.spring_fecoma_api_rest.entities.Puesto;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "usuarios")
 public class Usuario implements Serializable {
 
@@ -54,14 +63,28 @@ public class Usuario implements Serializable {
 
     private Boolean enabled;
 
+    @NotNull
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"usuarios","hibernateLazyInitializer","handler"})
     @JoinTable(name = "usuarios_roles",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"),
             uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id","role_id"})})
-    private List<Role> roles;
+    private Set<Role> roles =  new HashSet<>();
 
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     private Puesto puesto;
+
+    public Usuario(String nombre, String apellido, String direccion, String dni, String telefono, String correo, String username, String password, Boolean enabled) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.direccion = direccion;
+        this.dni = dni;
+        this.telefono = telefono;
+        this.correo = correo;
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
+    }
 }

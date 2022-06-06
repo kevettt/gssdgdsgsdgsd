@@ -26,7 +26,6 @@ public class Puesto implements Serializable {
     private String puesto;
 
     @Column(nullable = false)
-    @Size(max = 6000,min = 0,message = "Ingrese un numero superior a 0 digitos")
     @Min(value = 0)
     private double sueldo;
 

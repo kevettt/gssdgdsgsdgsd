@@ -2,6 +2,7 @@ HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
+!**/src/main/java/com/utp/factory/spring_fecoma_api_rest/security/auth/JwtConfig.java
 !**/src/test/**/target/
 
 ### STS ###
