@@ -102,6 +102,7 @@ public class UsuarioController {
         usuario1.setTelefono(usuario.getTelefono());
         usuario1.setPuesto(usuario.getPuesto());
         usuario1.setCorreo(usuario.getCorreo());
+        usuario1.setEnabled(usuario.getEnabled());
         return ResponseEntity.ok(iUsuarioService.edit(usuario1));
 
     }
