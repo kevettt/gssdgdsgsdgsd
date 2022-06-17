@@ -19,7 +19,7 @@ import java.util.Arrays;
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/api/v1/auth/login").permitAll()
+        http.authorizeRequests().antMatchers("/api/v1/auth/login","/api/v1/empleado/crear","/api/v1/rol/crear").permitAll()
                 /*.antMatchers("/api/v1/proveedores/list").hasAnyRole("USER","ADMIN")
                 .antMatchers("/api/v1/proveedores/**").hasRole("ADMIN")*/
                 .anyRequest().authenticated()

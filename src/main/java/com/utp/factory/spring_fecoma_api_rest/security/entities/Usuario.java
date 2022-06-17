@@ -1,6 +1,7 @@
 package com.utp.factory.spring_fecoma_api_rest.security.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.utp.factory.spring_fecoma_api_rest.entities.Factura;
 import com.utp.factory.spring_fecoma_api_rest.entities.Puesto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +22,6 @@ import java.util.Set;
 @Setter
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity(name = "usuarios")
 public class Usuario implements Serializable {
 
@@ -62,6 +63,14 @@ public class Usuario implements Serializable {
     private String password;
 
     private Boolean enabled;
+
+    @JsonIgnoreProperties(value = {"usuario","hibernateLazyInitializer","handler"},allowSetters = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario",cascade = CascadeType.ALL)
+    private List<Factura> facturas;
+
+    public Usuario(){
+        facturas = new ArrayList<>();
+    }
 
     @NotNull
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

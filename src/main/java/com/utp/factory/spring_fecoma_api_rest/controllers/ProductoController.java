@@ -100,6 +100,7 @@ public class ProductoController {
             productoactual.setDescripcion(producto.getDescripcion());
             productoactual.setCategoria(producto.getCategoria());
             productoactual.setCosto(producto.getCosto());
+            productoactual.setPrecio(producto.getPrecio());
             productoactual.setCantidad(producto.getCantidad());
             productoactual.setProveedor(producto.getProveedor());
             productoactualizado=iProductoService.edit(productoactual);

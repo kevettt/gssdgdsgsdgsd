@@ -13,4 +13,5 @@ public interface IProductoService {
     void eliminar(Long id);
     Producto save(Producto producto);
     Producto edit(Producto producto);
+    List<Producto> findByNombreContainingIgnoreCase(String term);
 }

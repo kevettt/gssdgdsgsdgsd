@@ -30,12 +30,11 @@ public class Producto implements Serializable {
     @Column(nullable = false)
     private String descripcion;
 
-
-
-    @Min(value = 1,message = ": El monto no puede ser 0 o negativo")
+    @Min(value = 0,message = ": El monto no puede ser 0 o negativo")
     private double costo;
 
-
+    @Min(value = 0,message = ": El precio no puede ser 0 o negativo")
+    private double precio;
 
     @Min(value = 1, message = ": El cantidad no puede ser menor a 1")
     private int cantidad;
@@ -49,7 +48,4 @@ public class Producto implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
-
-
-
 }
