@@ -131,4 +131,9 @@ public class ProductoController {
 
         return  new ResponseEntity<>("Producto eliminado", HttpStatus.OK);
     }
+
+    @DeleteMapping("/deleteall")
+    public void eliminartodo(){
+        iProductoService.deleteAll();
+    }
 }

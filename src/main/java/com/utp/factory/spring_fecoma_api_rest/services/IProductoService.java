@@ -14,4 +14,5 @@ public interface IProductoService {
     Producto save(Producto producto);
     Producto edit(Producto producto);
     List<Producto> findByNombreContainingIgnoreCase(String term);
+    void deleteAll();
 }

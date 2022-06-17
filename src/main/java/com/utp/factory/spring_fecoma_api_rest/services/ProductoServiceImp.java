@@ -33,8 +33,10 @@ public class ProductoServiceImp implements IProductoService{
     @Override
     public void eliminar(Long id) {
         productoRepository.deleteById(id);
-
     }
+
+
+
 
     @Override
     public Producto save(Producto producto) {
@@ -50,5 +52,10 @@ public class ProductoServiceImp implements IProductoService{
     @Transactional
     public List<Producto> findByNombreContainingIgnoreCase(String term) {
         return productoRepository.findByNombreContainingIgnoreCase(term);
+    }
+
+    @Override
+    public void deleteAll() {
+        productoRepository.deleteAll();
     }
 }
