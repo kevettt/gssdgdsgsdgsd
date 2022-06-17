@@ -5,10 +5,14 @@ import com.utp.factory.spring_fecoma_api_rest.entities.Producto;
 import com.utp.factory.spring_fecoma_api_rest.services.IFacturaService;
 import com.utp.factory.spring_fecoma_api_rest.services.IProductoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value ="/api/v1/factura")
@@ -34,9 +38,19 @@ public class FacturaController {
     }
 
     @GetMapping("/filtrar/{term}")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Producto> filtrarProducto(@PathVariable String term){
-        return productoService.findByNombreContainingIgnoreCase(term);
+    public ResponseEntity<?> filtrarProducto(@PathVariable String term){
+        Map<String,Object> respuesta = new HashMap<>();
+        if(term.length()>0){
+            try {
+                respuesta.put("data",productoService.findByNombreContainingIgnoreCase(term));
+                respuesta.put("mensaje","respuesta exitosa");
+                return new ResponseEntity<>(respuesta,HttpStatus.OK);
+            }catch (Exception e){
+                respuesta.put("mensaje","error en la consulta");
+                respuesta.put("error",e.getMessage().concat(" = ").concat(e.getMessage()));
+            }
+        }
+        return new ResponseEntity<>(respuesta,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PostMapping("/crear")
