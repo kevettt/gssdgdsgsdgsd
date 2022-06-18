@@ -24,8 +24,6 @@ public class LineaFactura implements Serializable {
     @JoinColumn(name = "producto_id")
     private Producto producto;
 
-
-
     public Double getImporte(){
         return cantidad.doubleValue() * producto.getPrecio();
     }
