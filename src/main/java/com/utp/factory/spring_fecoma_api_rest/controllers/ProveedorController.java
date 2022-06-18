@@ -73,6 +73,7 @@ public class ProveedorController {
         proveedor1.setNombre(proveedor.getNombre());
         proveedor1.setRuc(proveedor.getRuc());
         proveedor1.setDireccion(proveedor.getDireccion());
+        proveedor1.setRepresentante(proveedor.getRepresentante());
         return ResponseEntity.ok(iProveedorService.edit(proveedor1));
 
     }

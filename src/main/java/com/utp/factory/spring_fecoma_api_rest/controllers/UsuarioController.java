@@ -36,7 +36,6 @@ public class UsuarioController {
 
     @GetMapping("/lista")//listar Empleados
     public ResponseEntity<List<Usuario>> fineAll(){
-
         return ResponseEntity.ok(iUsuarioService.fineAll());
     }
     @GetMapping("/pagina/{page}")//paginacion
